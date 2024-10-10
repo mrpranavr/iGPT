@@ -26,7 +26,7 @@ const content = [
     fontColor: Colors.yellow,
   },
   {
-    title: 'ChatGPT.',
+    title: 'iGPT.',
     bg: Colors.green,
     fontColor: Colors.pink,
   },

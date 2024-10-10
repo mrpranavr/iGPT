@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   Image,
   Keyboard,
   KeyboardAvoidingView,
@@ -12,19 +13,64 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 import { defaultStyles } from "@/constants/Styles";
 import Colors from "@/constants/Colors";
+import { useSignIn, useSignUp } from "@clerk/clerk-expo";
 
 const login = () => {
   const { type } = useLocalSearchParams<{ type: string }>();
   const [loading, setLoading] = useState(false);
-  const [emailAddress, setEmailAddress] = useState("icarustest@gmail.com");
-  const [password, setPassword] = useState("");
+  const [emailAddress, setEmailAddress] = useState("icarustestclerk_test@gmail.com");
+  const [password, setPassword] = useState("IcarusTest123");
 
-  const onSignUpPress = async () => {};
+  const {signIn, isLoaded, setActive} = useSignIn()
+  const {signUp, isLoaded: signUpLoaded, setActive: signUpSetActive } = useSignUp()
 
-  const onSignInPress = async () => {};
+  const router = useRouter()
+
+  const onSignUpPress = async () => {
+    if (!signUpLoaded) {
+      return;
+    }
+    setLoading(true);
+
+    try {
+      // Create the user on Clerk
+      const result = await signUp.create({
+        emailAddress,
+        password,
+      });
+      console.log('signup - result: ', result)
+      // This indicates the user is signed in
+      signUpSetActive({ session: result.createdSessionId });
+      console.log('SESSION ID RECEIVED HERE !!!')
+    } catch (err: any) {
+      alert(err.errors[0].message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onSignInPress = async () => {
+    if (!isLoaded) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const completeSignIn = await signIn.create({
+        identifier: emailAddress,
+        password,
+      });
+
+      // This indicates the user is signed in
+      await setActive({ session: completeSignIn.createdSessionId });
+    } catch (err: any) {
+      Alert.alert(err.errors[0].message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
