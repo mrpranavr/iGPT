@@ -71,11 +71,11 @@ const InitialLayout = () => {
     console.log('use effect - isSignedIn : ', isSignedIn)
     if(isSignedIn && !inAuthGroup) {
       // Bring the user inside
-      router.replace("/(auth)/")
+      router.replace("/(auth)/(drawer)/(chat)/new")
     } else if(!isSignedIn && inAuthGroup) {
       // Kick the user out
       console.log('SUPPOSED TO BE KICKED OUT')
-      router.replace({pathname: '/login', params: {type: 'login'}})
+      router.replace({pathname: '/', params: {type: 'login'}})
     }
   }, [isSignedIn])
 

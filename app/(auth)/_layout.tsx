@@ -5,7 +5,9 @@ import { useAuth } from '@clerk/clerk-expo'
 
 const RootLayoutNav = () => { 
   return (
-    <Stack />
+    <Stack>
+      <Stack.Screen name='(drawer)' options={{ headerShown: false }}/>
+    </Stack>
   )
 }
 
